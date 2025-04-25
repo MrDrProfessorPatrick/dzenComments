@@ -25,7 +25,6 @@ model User {
   name     String
   email    String    @unique
   comments Comment[]
-  likes    Like[]
 }
 
 model Comment {
@@ -44,10 +43,9 @@ model Comment {
 }
 
 model Like {
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   userId    String
   commentId String
 
-  @@id([userId, commentId])
+  @@id([commentId])
 }
