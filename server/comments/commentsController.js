@@ -10,7 +10,7 @@ class CommentsController {
             }})
             return res.status(200).json(posts);
         } catch (error) {
-            return res.status(500).json({ message: 'Error fetching posts' });
+            return res.status(500).json({ message: error });
         }
      }
 }

@@ -8,7 +8,6 @@ function App() {
 
   return (
     <div>
-        APP
       <Routes>
         <Route path="/" element={<PostList />} />
         <Route path="/posts/:id" element = {<Post />} />
