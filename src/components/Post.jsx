@@ -11,7 +11,7 @@ export default function Post() {
       <section>
         <AddCommentForm />
           <div className="mt-4">
-            <CommentList comments={rootComments} />
+            {/* <CommentList comments={rootComments} /> */}
           </div>
       </section>
     </>
