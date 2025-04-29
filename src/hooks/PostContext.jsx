@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
-import { useAsync } from "../hooks/useAsync"
-import { getPost } from "../services/posts"
+import { useAsync } from "./useAsync.js"
+import { getPosts } from "../services/posts.js"
 
 const Context = React.createContext()
 
@@ -11,7 +11,7 @@ export function usePost() {
 
 export function PostProvider({ children }) {
   const { id } = useParams()
-  const { loading, error, value: post } = useAsync(() => getPost(id), [id])
+  const { loading, error, value: post } = useAsync(() => getPosts(id), [id])
   const [comments, setComments] = useState([])
   const commentsByParentId = useMemo(() => {
     const group = {}
@@ -94,7 +94,7 @@ export function PostProvider({ children }) {
       {loading ? (
         <h1>Loading</h1>
       ) : error ? (
-        <h1 className="error-msg">{error}</h1>
+        <h1>{error}</h1>
       ) : (
         children
       )}

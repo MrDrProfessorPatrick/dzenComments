@@ -1,8 +1,10 @@
 
 import AddCommentForm from "./AddCommentForm"
-import { usePost } from "../hooks/usePost"
+import CommentsList from "./CommentsList"
+import { usePost } from "../hooks/PostContext"
 import { useAsyncFn } from "../hooks/useAsync"
 import { createComment } from "../services/comments";
+
 
 export default function Post() {
 
@@ -23,7 +25,7 @@ export default function Post() {
         <AddCommentForm submitComment={ handleCommentCreate }/>
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
-            // Comments here
+            <CommentList comments={rootComments}/>
           </div>
         )}
       </section>
