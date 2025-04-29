@@ -1,4 +1,4 @@
-export default function AddCommentForm() {
+export default function AddCommentForm({ submitComment }) {
     return (
         <div className="flex-col gap-3 h-screen w-screen p-6 bg-red-100">
             <span className="text-3xl">Comments</span>
