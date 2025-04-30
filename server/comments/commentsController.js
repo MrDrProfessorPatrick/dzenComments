@@ -107,8 +107,6 @@ class CommentsController {
       .then(comment => {
         return {
           ...comment,
-          likeCount: 0,
-          likedByMe: false,
         }
       })
   } 
