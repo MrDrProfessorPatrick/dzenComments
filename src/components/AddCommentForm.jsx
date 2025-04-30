@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddCommentForm({ submitComment }) {
+export default function AddCommentForm({postId, submitComment }) {
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [homepage, setHomepage] = useState('');
@@ -21,6 +21,7 @@ export default function AddCommentForm({ submitComment }) {
     }
 
     const commentData = {
+      postId,
       userName,
       email,
       homepage,

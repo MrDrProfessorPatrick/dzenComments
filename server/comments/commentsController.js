@@ -80,39 +80,53 @@ class CommentsController {
       if (req.body.message === "" || req.body.message == null) {
         return res.res.status(400).json('Message is required');
       }
+      const {postId, userName, email, homepage, message} = req.body.message;
+      const normalizedEmail = email.trim().toLowerCase()
 
-      console.log('message', req.body.message)
+      let user = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+      })
 
-      // prisma.comment
-      // .create({
-      //   data: {
-      //     message: req.body.message,
-      //     userId: req.cookies.userId,
-      //     parentId: req.body.parentId,
-      //     postId: req.params.id,
-      //   },
-      //   select: {
-      //     id: true,
-      //     message: true,
-      //     parentId: true,
-      //     createdAt: true,
-      //     likes: true,
-      //     user: {
-      //       select: {
-      //         id: true,
-      //         name: true,
-      //       },
-      //     },
-      //     _count: { select: { likes: true } },
-      //   },
-      // })
-      // .then(comment => {
-      //   return {
-      //     ...comment,
-      //   }
-      // })
-  } 
-}
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: userName,
+            email: normalizedEmail,
+            homepage,
+          },
+        })
+
+      prisma.comment
+        .create({
+          data: {
+            message: message,
+            userId: user.id,
+            parentId: null, // TODO ADD parentId
+            postId
+          },
+          select: {
+            id: true,
+            message: true,
+            parentId: true,
+            createdAt: true,
+            likes: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            _count: { select: { likes: true } },
+          },
+        })
+      .then(comment => {
+        return {
+          ...comment,
+        }
+      })
+    } 
+  }
+}  
 
 const commentsController = new CommentsController();
 export default commentsController;
