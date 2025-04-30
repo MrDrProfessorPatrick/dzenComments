@@ -6,9 +6,19 @@ export default function AddCommentForm({ submitComment }) {
   const [homepage, setHomepage] = useState('');
   const [captchaAnswer, setCaptchaAnswer] = useState('');
   const [message, setMessage] = useState('');
+  const [homepageError, setHomepageError] = useState('');
+
+  const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (homepage && !urlRegex.test(homepage)) {
+      setHomepageError('Please enter a valid URL');
+      return;
+    } else {
+      setHomepageError('');
+    }
 
     const commentData = {
       userName,
@@ -28,7 +38,7 @@ export default function AddCommentForm({ submitComment }) {
   }
 
   return (
-    <div className="flex-col gap-3 h-45 w-screen p-6 bg-red-100">
+    <div className="flex-col gap-3 h-fit w-screen p-6 bg-red-100">
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -36,7 +46,7 @@ export default function AddCommentForm({ submitComment }) {
           required
           value={userName}
           onChange={e => setUsername(e.target.value)}
-          className="border-[1px] border-zinc-400 p-4 w-3/4"
+          className="border-[1px] border-zinc-400 p-4 w-3/4 h-6"
         />
 
         <input
@@ -45,16 +55,21 @@ export default function AddCommentForm({ submitComment }) {
           required
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="border-[1px] border-zinc-400 p-4 w-3/4"
+          className="border-[1px] border-zinc-400 p-4 w-3/4 h-6"
         />
 
-        <input
-          type="url"
-          placeholder="Homepage (optional)"
-          value={homepage}
-          onChange={e => setHomepage(e.target.value)}
-          className="border-[1px] border-zinc-400 p-4 w-3/4"
-        />
+        <div className="flex flex-col w-3/4">
+          <input
+            type="text"
+            placeholder="Homepage (optional)"
+            value={homepage}
+            onChange={e => setHomepage(e.target.value)}
+            className={`border-[1px] p-4 h-6 ${homepageError ? 'border-red-500' : 'border-zinc-400'}`}
+          />
+          {homepageError && (
+            <span className="text-red-600 text-sm mt-1">{homepageError}</span>
+          )}
+        </div>
 
         <div className="flex items-center gap-3">
           <img src="/path/to/captcha-image" alt="captcha" className="h-12 w-auto" />
@@ -64,7 +79,7 @@ export default function AddCommentForm({ submitComment }) {
             required
             value={captchaAnswer}
             onChange={e => setCaptchaAnswer(e.target.value)}
-            className="border-[1px] border-zinc-400 p-4 w-1/2"
+            className="border-[1px] border-zinc-400 p-4 w-1/2 h-6"
           />
         </div>
 
