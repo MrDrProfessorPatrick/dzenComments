@@ -81,34 +81,36 @@ class CommentsController {
         return res.res.status(400).json('Message is required');
       }
 
-      prisma.comment
-      .create({
-        data: {
-          message: req.body.message,
-          userId: req.cookies.userId,
-          parentId: req.body.parentId,
-          postId: req.params.id,
-        },
-        select: {
-          id: true,
-          message: true,
-          parentId: true,
-          createdAt: true,
-          likes: true,
-          user: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          _count: { select: { likes: true } },
-        },
-      })
-      .then(comment => {
-        return {
-          ...comment,
-        }
-      })
+      console.log('message', req.body.message)
+
+      // prisma.comment
+      // .create({
+      //   data: {
+      //     message: req.body.message,
+      //     userId: req.cookies.userId,
+      //     parentId: req.body.parentId,
+      //     postId: req.params.id,
+      //   },
+      //   select: {
+      //     id: true,
+      //     message: true,
+      //     parentId: true,
+      //     createdAt: true,
+      //     likes: true,
+      //     user: {
+      //       select: {
+      //         id: true,
+      //         name: true,
+      //       },
+      //     },
+      //     _count: { select: { likes: true } },
+      //   },
+      // })
+      // .then(comment => {
+      //   return {
+      //     ...comment,
+      //   }
+      // })
   } 
 }
 
