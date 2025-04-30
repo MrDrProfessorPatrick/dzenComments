@@ -6,5 +6,6 @@ const router = new Router();
 
 router.get('/getposts', controller.getPost);
 router.get('/getposts/:id', controller.getPostById);
+router.post('/createcomment/:postId', controller.createComment);
 
 export default router;
