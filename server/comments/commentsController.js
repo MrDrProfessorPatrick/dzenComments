@@ -75,6 +75,43 @@ class CommentsController {
             return res.status(500).json({ message: error });
         }
      }
+
+    async createComment(req, res) {
+      if (req.body.message === "" || req.body.message == null) {
+        return res.res.status(400).json('Message is required');
+      }
+
+      prisma.comment
+      .create({
+        data: {
+          message: req.body.message,
+          userId: req.cookies.userId,
+          parentId: req.body.parentId,
+          postId: req.params.id,
+        },
+        select: {
+          id: true,
+          message: true,
+          parentId: true,
+          createdAt: true,
+          likes: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: { select: { likes: true } },
+        },
+      })
+      .then(comment => {
+        return {
+          ...comment,
+          likeCount: 0,
+          likedByMe: false,
+        }
+      })
+  } 
 }
 
 const commentsController = new CommentsController();

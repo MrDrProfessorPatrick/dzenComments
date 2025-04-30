@@ -1,7 +1,7 @@
 import { makeRequest } from "./makeRequest"
 
 export function createComment({ postId, message, parentId }) {
-    return makeRequest(`posts/${postId}/createcomment`, {
+    return makeRequest(`/api/${postId}/createcomment`, {
       method: "POST",
       data: { message, parentId },
     })
