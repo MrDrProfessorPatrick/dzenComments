@@ -1,10 +1,10 @@
 import Comment from "./Comment"
 
-export default function CommentList({ comments }) {
-  console.log('comments', comments)
+export default function CommentList({ postId, comments, submitComment }) {
+  console.log('submitComment in commentList', submitComment)
   return comments.map(comment => (
     <div key={comment.id} className="comment-stack">
-        <Comment {...comment} /> 
+        <Comment id={comment.id} user={comment.user} message ={comment.message} postId={postId} submitComment={submitComment}  /> 
     </div>
   ))
 }

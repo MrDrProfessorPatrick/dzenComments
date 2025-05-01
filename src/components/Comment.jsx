@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { usePost } from '../hooks/PostContext'
 import CommentList from './CommentsList'
+import { RiQuestionAnswerLine } from "react-icons/ri";
+import AddCommentForm from './AddCommentForm';
 
-export default function Comment({ id, user, message }) {
+export default function Comment({ postId, id, user, message, submitComment }) {
 
     const dateFormatter = new Intl.DateTimeFormat(undefined, {
         dateStyle: "short",
@@ -11,19 +13,20 @@ export default function Comment({ id, user, message }) {
 
     const { getReplies } = usePost()
     const childComments = getReplies(id)
-
+    const [addCommentVisisble, showAddComment] = useState(false)
+      console.log('submitComment in comment', submitComment)
     return (
         <>
-        <div className="comment">
-            <div className="header">
-                <span className="name">{user.name}</span>
-                <span className="ml-10 text-xs" >
-                {dateFormatter.format(new Date())}
-                </span>
+            <div className="comment">
+                <div className="flex items-center gap-2">
+                    <span className="name">{user.name}</span>
+                    <button type='button' onClick={ () => {showAddComment(!addCommentVisisble)} } className='cursor-pointer'><RiQuestionAnswerLine /></button>
+                    <span className="ml-10 text-xs" >{dateFormatter.format(new Date())}</span>
+                </div>
+            <div className="bg-green-200">{message}</div>
+            {childComments && childComments.length > 0 && <div className='ml-2 bg-orange-200'>{<CommentList comments={childComments}/>}</div> }
             </div>
-        <div className="bg-green-200">{message}</div>
-        {childComments && childComments.length > 0 && <div className='ml-2 bg-orange-200'>{CommentList({comments:childComments})}</div> }
-        </div>
+            { addCommentVisisble && <AddCommentForm postId={postId} parentId={id} submitComment={submitComment} /> }
         </>
     )
  }

@@ -1,6 +1,7 @@
 
 import AddCommentForm from "./AddCommentForm"
 import CommentsList from "./CommentsList"
+
 import { usePost } from "../hooks/PostContext"
 import { useAsyncFn } from "../hooks/useAsync"
 import { createComment } from "../services/comments";
@@ -13,7 +14,8 @@ export default function Post() {
   const { loading, error, execute: createCommentFn } = useAsyncFn(createComment)
 
   function handleCommentCreate(message) {
-    createCommentFn( { postId:post.id, message } ).then((comment) => console.log('comment', comment))
+    console.log('handleCommentCreate')
+    createCommentFn({message}).then((comment) => console.log('comment', comment))
   }
 
   return (
@@ -25,7 +27,7 @@ export default function Post() {
         <AddCommentForm postId={post.id} submitComment={handleCommentCreate}/>
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
-            <CommentsList comments={rootComments}/>
+            <CommentsList comments={rootComments} postId={post.id} submitComment={handleCommentCreate}/>
           </div>
         )}
       </section>

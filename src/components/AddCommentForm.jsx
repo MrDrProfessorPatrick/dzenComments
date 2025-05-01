@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddCommentForm({postId, submitComment }) {
+export default function AddCommentForm({postId, parentId, submitComment}) {
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [homepage, setHomepage] = useState('');
@@ -9,6 +9,8 @@ export default function AddCommentForm({postId, submitComment }) {
   const [homepageError, setHomepageError] = useState('');
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
+
+  console.log('submitComment', submitComment)
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +24,7 @@ export default function AddCommentForm({postId, submitComment }) {
 
     const commentData = {
       postId,
+      parentId,
       userName,
       email,
       homepage,
