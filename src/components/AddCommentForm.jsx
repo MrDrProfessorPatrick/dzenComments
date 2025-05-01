@@ -38,7 +38,7 @@ export default function AddCommentForm({postId, parentId, submitComment}) {
       setHomepage('');
       setCaptchaAnswer('');
       setMessage('');
-    });
+    }); // TODO ADD ERROR HANDLING
   }
 
   return (

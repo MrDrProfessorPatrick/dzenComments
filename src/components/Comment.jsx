@@ -3,18 +3,26 @@ import { usePost } from '../hooks/PostContext'
 import CommentList from './CommentsList'
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import AddCommentForm from './AddCommentForm';
+import { useAsyncFn } from '../hooks/useAsync'
+import { createComment } from '../services/comments'
 
-export default function Comment({ postId, id, user, message, submitComment }) {
+export default function Comment({ postId, id, user, message }) {
 
     const dateFormatter = new Intl.DateTimeFormat(undefined, {
         dateStyle: "short",
         timeStyle: "short",
       })
 
+        const { loading, error, execute: createCommentFn } = useAsyncFn(createComment)
+      
+        function handleCommentCreate(message) {
+          console.log('handleCommentCreate')
+          createCommentFn({message}).then((comment) => console.log('comment', comment))
+        }
+
     const { getReplies } = usePost()
     const childComments = getReplies(id)
     const [addCommentVisisble, showAddComment] = useState(false)
-      console.log('submitComment in comment', submitComment)
     return (
         <>
             <div className="comment">
@@ -26,7 +34,7 @@ export default function Comment({ postId, id, user, message, submitComment }) {
             <div className="bg-green-200">{message}</div>
             {childComments && childComments.length > 0 && <div className='ml-2 bg-orange-200'>{<CommentList comments={childComments}/>}</div> }
             </div>
-            { addCommentVisisble && <AddCommentForm postId={postId} parentId={id} submitComment={submitComment} /> }
+            { addCommentVisisble && <AddCommentForm postId={postId} parentId={id} submitComment={handleCommentCreate} /> }
         </>
     )
  }

@@ -30,7 +30,6 @@ class CommentsController {
     }
 
      async getPostById(req, res) {
-        try {
             prisma.post
             .findUnique({
               where: { id: req.params.id },
@@ -70,11 +69,11 @@ class CommentsController {
               }
               return res.status(200).json(response);
             })
-        } catch (error) {
-            console.log('error', error)
-            return res.status(500).json({ message: error });
-        }
-     }
+            .catch((error) => {
+              console.log('error', error)
+              return res.status(500).json({ message: error });
+            })
+          }
 
     async createComment(req, res) {
       if (req.body.message === "" || req.body.message == null) {
@@ -95,13 +94,13 @@ class CommentsController {
             homepage,
           },
         })
-
+      }
       prisma.comment
         .create({
           data: {
             message: message,
             userId: user.id,
-            parentId: parentId || '', // TODO ADD parentId
+            parentId: parentId || null,
             postId
           },
           select: {
@@ -120,13 +119,10 @@ class CommentsController {
           },
         })
       .then(comment => {
-        return {
-          ...comment,
-        }
+        return res.status(200).json(comment);
       })
-    } 
   }
-}  
+}
 
 const commentsController = new CommentsController();
 export default commentsController;

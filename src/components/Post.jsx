@@ -15,7 +15,7 @@ export default function Post() {
 
   function handleCommentCreate(message) {
     console.log('handleCommentCreate')
-    createCommentFn({message}).then((comment) => console.log('comment', comment))
+    createCommentFn({message}).then((comment) => comment)
   }
 
   return (
@@ -27,7 +27,7 @@ export default function Post() {
         <AddCommentForm postId={post.id} submitComment={handleCommentCreate}/>
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
-            <CommentsList comments={rootComments} postId={post.id} submitComment={handleCommentCreate}/>
+            <CommentsList comments={rootComments} postId={post.id} />
           </div>
         )}
       </section>
