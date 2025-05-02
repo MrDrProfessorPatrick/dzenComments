@@ -28,8 +28,8 @@ const wss = new WebSocketServer({ server, path: '/ws' });
 const clients = new Set();
 
 wss.on('connection', (ws) => {
-    clients.add(ws);
     console.log('New WebSocket connection');
+    clients.add(ws);
   
     ws.on('message', (message) => {
       console.log('Received message:', message.toString());
@@ -52,4 +52,4 @@ wss.on('connection', (ws) => {
       });
     });
 
-app.listen(port, () => { console.log(`server started on port ${port}`) });
+server.listen(port, () => { console.log(`server started on port ${port}`) });

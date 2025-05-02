@@ -10,8 +10,6 @@ export default function AddCommentForm({postId, parentId, submitComment}) {
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
-  console.log('submitComment', submitComment)
-
   function handleSubmit(e) {
     e.preventDefault();
 

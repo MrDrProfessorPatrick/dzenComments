@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useCallback, useState } from "react"
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useParams } from "react-router-dom"
 import { useAsync } from "./useAsync.js"
 import { getPostById } from "../services/posts.js"
@@ -12,6 +13,7 @@ export function usePost() {
 export function PostProvider({ children }) {
   const { id } = useParams()
   const { loading, error, value: post } = useAsync(() => getPostById(id), [id])
+  const { sendMessage, lastMessage, readyState } = useWebSocket("ws://localhost:3000/ws");
   const [comments, setComments] = useState([])
   const commentsByParentId = useMemo(() => {
     const group = {}
@@ -26,6 +28,10 @@ export function PostProvider({ children }) {
     if (post?.comments == null) return
     setComments(post.comments)
   }, [post?.comments])
+
+  const handleClickSendMessage = useCallback(() => sendMessage('Hello'), []);
+
+  useEffect(() => handleClickSendMessage(), []);
 
   function getReplies(parentId) {
     return commentsByParentId[parentId]
