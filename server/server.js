@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
+import { Buffer } from 'node:buffer';
 // import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 import dotenv from "dotenv"
 
 import commentsRouter from './comments/commentsRouter.js';
+import { createCommentHelper } from './comments/helpers.js';
 
 dotenv.config()
 
@@ -32,17 +34,21 @@ wss.on('connection', (ws) => {
     clients.add(ws);
   
     ws.on('message', (message) => {
-      console.log('Received message:', message.toString());
-  
-      // Echo to all clients
-      for (let client of clients) {
-        if (client.readyState === ws.OPEN) {
-          client.send(message.toString().slice());
+      const stringMessage = message.toString();
+      const parsedMessage = JSON.parse(stringMessage);
+      if(parsedMessage && parsedMessage.type && parsedMessage.type === 'connection') return;
+      const { postId, parentId, userName, email, homepage, message:textMessage } = parsedMessage;
+      createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage}).then(comment => {
+        const commentBuffer = Buffer.from(JSON.stringify(comment));
+        for (let client of clients) {
+          if (client.readyState === ws.OPEN) {
+            client.send(commentBuffer);
+          }
         }
-      }
+      })
     });
 
-    ws.on('close', () => {
+    ws.on('close', () => { // TODO check disconnection
         console.log('WebSocket disconnected');
         clients.delete(ws);
       });

@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+import { createCommentHelper } from './helpers.js';
+
 class CommentsController {
     constructor() {
         this.COMMENT_FIELDS = {
@@ -80,53 +82,12 @@ class CommentsController {
       if (req.body.message === "" || req.body.message == null) {
         return res.res.status(400).json('Message is required');
       }
+      
       const {postId, parentId, userName, email, homepage, message} = req.body.message;
-      const normalizedEmail = email.trim().toLowerCase()
-
-      let user = await prisma.user.findUnique({
-        where: { email: normalizedEmail },
-      })
-
-      if (!user) {
-        user = await prisma.user.create({
-          data: {
-            name: userName,
-            email: normalizedEmail,
-            homepage,
-          },
-        })
-
-      prisma.comment
-        .create({
-          data: {
-            message: message,
-            userId: user.id,
-            parentId: parentId || '', // TODO ADD parentId
-            postId
-          },
-          select: {
-            id: true,
-            message: true,
-            parentId: true,
-            createdAt: true,
-            likes: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            _count: { select: { likes: true } },
-          },
-        })
-      .then(comment => {
-        return {
-          ...comment,
-        }
-      })
+      createCommentHelper({postId, parentId, userName, email, homepage, message});
     } 
   }
-}  
+
 
 const commentsController = new CommentsController();
 export default commentsController;

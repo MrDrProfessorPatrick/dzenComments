@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddCommentForm({postId, parentId, submitComment}) {
+export default function AddCommentForm({postId, parentId, submitComment, sendJsonMessage}) {
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [homepage, setHomepage] = useState('');
@@ -30,13 +30,15 @@ export default function AddCommentForm({postId, parentId, submitComment}) {
       message,
     };
 
-    submitComment(commentData).then(() => {
-      setUsername('');
-      setEmail('');
-      setHomepage('');
-      setCaptchaAnswer('');
-      setMessage('');
-    });
+    sendJsonMessage(commentData);
+
+    // submitComment(commentData).then(() => {
+    //   setUsername('');
+    //   setEmail('');
+    //   setHomepage('');
+    //   setCaptchaAnswer('');
+    //   setMessage('');
+    // });
   }
 
   return (

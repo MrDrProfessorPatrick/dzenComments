@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useCallback, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useParams } from "react-router-dom"
 import { useAsync } from "./useAsync.js"
@@ -13,7 +13,7 @@ export function usePost() {
 export function PostProvider({ children }) {
   const { id } = useParams()
   const { loading, error, value: post } = useAsync(() => getPostById(id), [id])
-  const { sendMessage, lastMessage, readyState } = useWebSocket("ws://localhost:3000/ws");
+  const { sendMessage, sendJsonMessage, lastMessage, readyState } = useWebSocket("ws://localhost:3000/ws");
   const [comments, setComments] = useState([])
   const commentsByParentId = useMemo(() => {
     const group = {}
@@ -29,9 +29,15 @@ export function PostProvider({ children }) {
     setComments(post.comments)
   }, [post?.comments])
 
-  const handleClickSendMessage = useCallback(() => sendMessage('Hello'), []);
+  useEffect(() => {
+    lastMessage && console.log('lastMessage', lastMessage.data);
+    lastMessage && lastMessage.data.text().then(text => {
+      const newComment = JSON.parse(text);
+      setComments(prevComments => [newComment, ...prevComments]);
+    })
+  }, [lastMessage]);
 
-  useEffect(() => handleClickSendMessage(), []);
+  useEffect(() => sendMessage('{"type":"connection"}'), []);
 
   function getReplies(parentId) {
     return commentsByParentId[parentId]
@@ -84,7 +90,7 @@ export function PostProvider({ children }) {
       })
     })
   }
-
+console.log('commentsByParentId', commentsByParentId)
   return (
     <Context.Provider
       value={{
@@ -95,6 +101,7 @@ export function PostProvider({ children }) {
         updateLocalComment,
         deleteLocalComment,
         toggleLocalCommentLike,
+        sendJsonMessage,
       }}
     >
       {loading ? (
