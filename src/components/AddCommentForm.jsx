@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddCommentForm({postId, parentId, submitComment, sendJsonMessage}) {
+export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [homepage, setHomepage] = useState('');

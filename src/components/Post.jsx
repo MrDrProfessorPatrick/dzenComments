@@ -24,7 +24,7 @@ export default function Post() {
       <article>{post.body}</article>
       <h3 className="comments-title">Comments</h3>
       <section>
-        <AddCommentForm postId={post.id} submitComment={handleCommentCreate} sendJsonMessage={sendJsonMessage}/>
+        <AddCommentForm postId={post.id} sendJsonMessage={sendJsonMessage}/>
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
             <CommentsList comments={rootComments} postId={post.id} submitComment={handleCommentCreate}/>

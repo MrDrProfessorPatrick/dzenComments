@@ -1,9 +1,9 @@
 import Comment from "./Comment"
 
-export default function CommentList({ postId, comments, submitComment }) {
+export default function CommentList({ comments }) {
   return comments.map(comment => (
     <div key={comment.id} className="comment-stack">
-        <Comment id={comment.id} user={comment.user} message ={comment.message} postId={postId} submitComment={submitComment}  /> 
+        <Comment id={comment.id} user={comment.user} message ={comment.message}  /> 
     </div>
   ))
 }

@@ -11,13 +11,13 @@ export async function createCommentHelper({postId, parentId, userName, email, ho
     if (!user) {
         user = await prisma.user.create({
             data: {
-            name: userName,
-            email: normalizedEmail,
-            homepage,
+                name: userName,
+                email: normalizedEmail,
+                homepage,
             },
         })
     }
-
+    
    const comment = await prisma.comment.create({
                 data: {
                     message: message,
@@ -40,6 +40,6 @@ export async function createCommentHelper({postId, parentId, userName, email, ho
                     _count: { select: { likes: true } },
                 },
             })
-    console.log('comment', comment)
+    
     return comment;            
 }

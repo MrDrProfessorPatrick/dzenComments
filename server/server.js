@@ -38,8 +38,10 @@ wss.on('connection', (ws) => {
       const parsedMessage = JSON.parse(stringMessage);
       if(parsedMessage && parsedMessage.type && parsedMessage.type === 'connection') return;
       const { postId, parentId, userName, email, homepage, message:textMessage } = parsedMessage;
+      
       createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage}).then(comment => {
         const commentBuffer = Buffer.from(JSON.stringify(comment));
+        
         for (let client of clients) {
           if (client.readyState === ws.OPEN) {
             client.send(commentBuffer);
@@ -48,7 +50,7 @@ wss.on('connection', (ws) => {
       })
     });
 
-    ws.on('close', () => { // TODO check disconnection
+    ws.on('close', () => {
         console.log('WebSocket disconnected');
         clients.delete(ws);
       });

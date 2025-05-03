@@ -4,14 +4,14 @@ import CommentList from './CommentsList'
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import AddCommentForm from './AddCommentForm';
 
-export default function Comment({ postId, id, user, message, submitComment }) {
+export default function Comment({id, user, message }) {
 
     const dateFormatter = new Intl.DateTimeFormat(undefined, {
         dateStyle: "short",
         timeStyle: "short",
       })
 
-    const { getReplies } = usePost()
+    const { getReplies, post, sendJsonMessage } = usePost()
     const childComments = getReplies(id)
     const [addCommentVisisble, showAddComment] = useState(false)
 
@@ -26,7 +26,7 @@ export default function Comment({ postId, id, user, message, submitComment }) {
             <div className="bg-green-200">{message}</div>
             {childComments && childComments.length > 0 && <div className='ml-2 bg-orange-200'>{<CommentList comments={childComments}/>}</div> }
             </div>
-            { addCommentVisisble && <AddCommentForm postId={postId} parentId={id} submitComment={submitComment} /> }
+            { addCommentVisisble && <AddCommentForm postId={post.id} parentId={id} sendJsonMessage={sendJsonMessage} /> }
         </>
     )
  }
