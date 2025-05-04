@@ -7,6 +7,9 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
   const [captchaAnswer, setCaptchaAnswer] = useState('');
   const [message, setMessage] = useState('');
   const [homepageError, setHomepageError] = useState('');
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState('No file chosen');
+  const [error, setError] = useState(null);
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
@@ -20,17 +23,40 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
       setHomepageError('');
     }
 
-    const commentData = {
-      postId,
-      parentId,
-      userName,
-      email,
-      homepage,
-      capcha: captchaAnswer,
-      message,
-    };
+    if(file) {
+      const reader = new FileReader();
 
-    sendJsonMessage(commentData);
+      reader.onload = function() {
+        const fileData = reader.result;
+        const commentData = {
+          postId,
+          parentId,
+          userName,
+          email,
+          homepage,
+          capcha: captchaAnswer,
+          message,
+          file:fileData,
+          fileName
+        };
+        sendJsonMessage(commentData)
+      }
+      reader.readAsDataURL(file);
+    } else {
+      const commentData = {
+        postId,
+        parentId,
+        userName,
+        email,
+        homepage,
+        capcha: captchaAnswer,
+        message,
+      };
+  
+      sendJsonMessage(commentData);
+  
+    }
+
 
     // submitComment(commentData).then(() => {
     //   setUsername('');
@@ -43,6 +69,11 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
 
   return (
     <div className="flex-col gap-3 h-fit w-screen p-6 bg-red-100">
+      {error && (
+        <div className="bg-red-200 text-red-600 p-4 rounded-md">
+          {error}
+        </div>
+      )}
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -86,7 +117,28 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
             className="border-[1px] border-zinc-400 p-4 w-1/2 h-6"
           />
         </div>
-
+        <div className="flex items-center gap-3">
+          <label htmlFor="inputFile" className="border" >Chose file</label>
+          <span  id="fileName">{fileName}</span>
+          <input
+            type="file"
+            name="file"
+            accept="image/*,.txt"
+            id="inputFile"
+            onChange={(e) => {
+              setError(null);
+              if(e.target.files?.[0]?.size > 100000) {
+                setError('File size exceeds 100KB');
+                setFile(null);
+                return;
+              }
+              setFile(e.target.files?.[0] || null)
+              setFileName(e.target.files?.[0]?.name || 'No file chosen');
+              console.log('size', e.target.files?.[0]?.size);
+            }}
+            style={{display: "none"}}
+          />
+        </div>
         <textarea
           onChange={e => setMessage(e.target.value)}
           placeholder="Add your comment please"
