@@ -43,6 +43,13 @@ model Comment {
   children  Comment[] @relation("ParentChild")
   parentId  String?
   likes     Like[]
+  fileUrl   String?  
+  fileType  FileType?
+}
+
+enum FileType {
+  IMAGE
+  TEXT
 }
 
 model Like {
