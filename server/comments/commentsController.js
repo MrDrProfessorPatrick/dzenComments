@@ -48,6 +48,8 @@ class CommentsController {
                     message: true,
                     parentId: true,
                     createdAt: true,
+                    fileUrl: true,
+                    fileType: true,
                     likes: true,
                     user: {
                       select: {

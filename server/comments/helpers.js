@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function createCommentHelper({postId, parentId, userName, email, homepage, message}){
+export async function createCommentHelper({postId, parentId, userName, email, homepage, message, fileUrl, fileType}) {
     const normalizedEmail = email.trim().toLowerCase()
 
     let user = await prisma.user.findUnique({
@@ -23,13 +23,18 @@ export async function createCommentHelper({postId, parentId, userName, email, ho
                     message: message,
                     userId: user.id,
                     parentId: parentId || null,
-                    postId
+                    postId,
+                    fileUrl,
+                    fileType
+
                 },
                 select: {
                     id: true,
                     message: true,
                     parentId: true,
                     createdAt: true,
+                    fileUrl: true,
+                    fileType: true,
                     likes: true,
                     user: {
                         select: {

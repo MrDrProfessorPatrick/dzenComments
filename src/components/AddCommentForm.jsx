@@ -51,6 +51,8 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
         homepage,
         capcha: captchaAnswer,
         message,
+        file: null,
+        fileName: null
       };
   
       sendJsonMessage(commentData);

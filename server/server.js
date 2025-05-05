@@ -1,6 +1,9 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
+import { fileURLToPath } from 'url';
 import { Buffer } from 'node:buffer';
 // import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
@@ -11,10 +14,12 @@ import { createCommentHelper } from './comments/helpers.js';
 
 dotenv.config()
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const port = process.env.PORT || 5002;
 const app = express();
-
 app.use(express.json({ limit: '50mb' }));
+
+app.use('/uploads', express.static('uploads'))
 
 app.use('/api', cors({
     origin: true,
@@ -37,9 +42,21 @@ wss.on('connection', (ws) => {
       const stringMessage = message.toString();
       const parsedMessage = JSON.parse(stringMessage);
       if(parsedMessage && parsedMessage.type && parsedMessage.type === 'connection') return;
-      const { postId, parentId, userName, email, homepage, message:textMessage } = parsedMessage;
+      const { postId, parentId, userName, email, homepage, message:textMessage, file, fileName } = parsedMessage;
+
+      const extension = path.extname(fileName);
+      const base64Data = file.split(',')[1]; // if it's a data URL
+      const buffer = Buffer.from(base64Data, 'base64');
+      const filePath = `${__dirname}/../uploads/${fileName}`;
+      fs.writeFileSync(filePath, buffer);
+      // TODO check file extension and close if it is wrong
+      let fileType = 'TEXT'
+      if(extension === '.jpg' || extension === '.jpeg' || extension === '.png' || extension === '.gif') {
+        fileType = 'IMAGE'
+       }
       
-      createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage}).then(comment => {
+      createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage,  fileUrl: `${fileName}`, fileType}).then(comment => {
+        // const file = fs.readFileSync(comment.fileUrl);
         const commentBuffer = Buffer.from(JSON.stringify(comment));
         
         for (let client of clients) {
