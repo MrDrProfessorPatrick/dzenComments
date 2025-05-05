@@ -22,7 +22,7 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
     } else {
       setHomepageError('');
     }
-
+    console.log('file', file);
     if(file) {
       const reader = new FileReader();
 
@@ -120,13 +120,13 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
           />
         </div>
         <div className="flex items-center gap-3">
-          <label htmlFor="inputFile" className="border" >Chose file</label>
+          <label htmlFor={`inputFile${parentId}`} className="border" >Chose file</label>
           <span  id="fileName">{fileName}</span>
           <input
             type="file"
             name="file"
             accept="image/*,.txt"
-            id="inputFile"
+            id={`inputFile${parentId}`}
             onChange={(e) => {
               setError(null);
               if(e.target.files?.[0]?.size > 100000) {
@@ -136,7 +136,6 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
               }
               setFile(e.target.files?.[0] || null)
               setFileName(e.target.files?.[0]?.name || 'No file chosen');
-              console.log('size', e.target.files?.[0]?.size);
             }}
             style={{display: "none"}}
           />
