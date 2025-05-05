@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaUndoAlt } from "react-icons/fa";
 
 export default function AddCommentForm({postId, parentId, sendJsonMessage, showAddComment}) {
   const [userName, setUsername] = useState('');
@@ -10,6 +11,7 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
   const [error, setError] = useState(null);
+  const [captcha, setCaptcha] = useState(getCaptcha());
 
   const resetForm = () => {
     setUsername('');
@@ -21,6 +23,16 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
     setFileName('No file chosen');
     setError(null);
   };
+
+  function getCaptcha() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let captcha = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      captcha += characters[randomIndex];
+    }
+    return captcha;
+  }
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
@@ -74,6 +86,10 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
     }
   }
 
+  useEffect(() => { 
+    setCaptcha(getCaptcha());
+  }, []);
+
   return (
     <div className="flex-col gap-3 h-fit w-screen p-6 bg-red-100">
       {error && (
@@ -114,7 +130,11 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
         </div>
 
         <div className="flex items-center gap-3">
-          <img src="/path/to/captcha-image" alt="captcha" className="h-12 w-auto" />
+          <div className="relative">
+           <img src="/public/captchaBg.png" className="h-12 w-auto object-cover opacity-0.95" alt="captcha" />
+           <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-3xl ">{captcha}</span>
+          </div>
+          <button className="w-8 h-8 bg-green-500 border border-green-600 flex items-center justify-center text-white hover:bg-green-600 hover:scale-110 transition duration-200 ease-in-out cursor-pointer"><FaUndoAlt /></button>
           <input
             type="text"
             placeholder="Enter captcha"
