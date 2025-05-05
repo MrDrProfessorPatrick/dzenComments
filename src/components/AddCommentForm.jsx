@@ -134,7 +134,12 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
             id={`inputFile${parentId}`}
             onChange={(e) => {
               setError(null);
-              if(e.target.files?.[0]?.size > 100000) {
+              if(e.target.files?.[0]?.type !== 'image/jpeg' && e.target.files?.[0]?.type !== 'image/png' && e.target.files?.[0]?.type !== 'image/gif' && e.target.files?.[0]?.type !== 'text/plain') {
+                setError('File type not supported');
+                setFile(null);
+                return;
+              }
+              if(e.target.files?.[0]?.type === 'text/plain' && e.target.files?.[0]?.size > 100000) {
                 setError('File size exceeds 100KB');
                 setFile(null);
                 return;

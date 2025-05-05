@@ -90,7 +90,6 @@ export function PostProvider({ children }) {
       })
     })
   }
-console.log('commentsByParentId', commentsByParentId)
   return (
     <Context.Provider
       value={{
