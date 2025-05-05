@@ -17,7 +17,7 @@ export default function Post() {
     console.log('handleCommentCreate')
     createCommentFn({message}).then((comment) => console.log('comment', comment))
   }
-
+  
   return (
     <>
       <h1>{post.title}</h1>

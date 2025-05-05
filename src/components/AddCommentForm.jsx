@@ -12,6 +12,7 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
   const [fileName, setFileName] = useState('No file chosen');
   const [error, setError] = useState(null);
   const [captcha, setCaptcha] = useState(getCaptcha());
+  const [captchaRefresh, setCaptchaRefresh] = useState(false);
 
   const resetForm = () => {
     setUsername('');
@@ -44,6 +45,12 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
       return;
     } else {
       setHomepageError('');
+    }
+
+    if (captchaAnswer !== captcha) {
+      setError('Captcha is incorrect');
+      setCaptcha(getCaptcha());
+      return;
     }
 
     if(file) {
@@ -88,7 +95,7 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
 
   useEffect(() => { 
     setCaptcha(getCaptcha());
-  }, []);
+  }, [captchaRefresh]);
 
   return (
     <div className="flex-col gap-3 h-fit w-screen p-6 bg-red-100">
@@ -134,7 +141,9 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage, showA
            <img src="/public/captchaBg.png" className="h-12 w-auto object-cover opacity-0.95" alt="captcha" />
            <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-3xl ">{captcha}</span>
           </div>
-          <button className="w-8 h-8 bg-green-500 border border-green-600 flex items-center justify-center text-white hover:bg-green-600 hover:scale-110 transition duration-200 ease-in-out cursor-pointer"><FaUndoAlt /></button>
+          <button
+            onClick={() => {setCaptchaRefresh(!captchaRefresh)}}
+           className="w-8 h-8 bg-green-500 border border-green-600 flex items-center justify-center text-white hover:bg-green-600 hover:scale-110 transition duration-200 ease-in-out cursor-pointer"><FaUndoAlt /></button>
           <input
             type="text"
             placeholder="Enter captcha"

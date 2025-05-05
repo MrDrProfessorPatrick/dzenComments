@@ -43,19 +43,22 @@ wss.on('connection', (ws) => {
       const parsedMessage = JSON.parse(stringMessage);
       if(parsedMessage && parsedMessage.type && parsedMessage.type === 'connection') return;
       const { postId, parentId, userName, email, homepage, message:textMessage, file, fileName } = parsedMessage;
+      let fileType = null;
 
-      const extension = path.extname(fileName);
-      const base64Data = file.split(',')[1]; // if it's a data URL
-      const buffer = Buffer.from(base64Data, 'base64');
-      const filePath = `${__dirname}/../uploads/${fileName}`;
-      fs.writeFileSync(filePath, buffer);
-      // TODO check file extension and close if it is wrong
-      let fileType = 'TEXT'
-      if(extension === '.jpg' || extension === '.jpeg' || extension === '.png' || extension === '.gif') {
-        fileType = 'IMAGE'
-       }
+      if(fileName) {
+        fileType = 'TEXT';
+        const extension = path.extname(fileName);
+        const base64Data = file.split(',')[1]; // if it's a data URL
+        const buffer = Buffer.from(base64Data, 'base64');
+        const filePath = `${__dirname}/../uploads/${fileName}`;
+        fs.writeFileSync(filePath, buffer);
+        // TODO check file extension and close if it is wrong
+        if(extension === '.jpg' || extension === '.jpeg' || extension === '.png' || extension === '.gif') {
+          fileType = 'IMAGE'
+         }
+      }
       
-      createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage,  fileUrl: `${fileName}`, fileType}).then(comment => {
+      createCommentHelper({postId, parentId, userName, email, homepage, message: textMessage,  fileUrl: fileName, fileType}).then(comment => {
         // const file = fs.readFileSync(comment.fileUrl);
         const commentBuffer = Buffer.from(JSON.stringify(comment));
         
