@@ -14,10 +14,9 @@ export default function Post() {
   const { loading, error, execute: createCommentFn } = useAsyncFn(createComment)
 
   function handleCommentCreate(message) {
-    console.log('handleCommentCreate')
     createCommentFn({message}).then((comment) => console.log('comment', comment))
   }
-  
+  console.log('rootComments', rootComments)
   return (
     <>
       <h1>{post.title}</h1>
@@ -27,7 +26,7 @@ export default function Post() {
         <AddCommentForm postId={post.id} sendJsonMessage={sendJsonMessage}/>
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
-            <CommentsList comments={rootComments} postId={post.id} submitComment={handleCommentCreate}/>
+            <CommentsList comments={rootComments} postId={post.id} submitComment={handleCommentCreate} />
           </div>
         )}
       </section>

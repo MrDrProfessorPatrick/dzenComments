@@ -4,7 +4,9 @@ import CommentList from './CommentsList'
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import AddCommentForm from './AddCommentForm';
 
-export default function Comment({id, user, message, image }) {
+export default function Comment({id, user, message, image, time }) {
+    
+    const date = new Date(time)
     const dateFormatter = new Intl.DateTimeFormat(undefined, {
         dateStyle: "short",
         timeStyle: "short",
@@ -20,7 +22,7 @@ export default function Comment({id, user, message, image }) {
                 <div className="flex items-center gap-2">
                     <span className="name">{user.name}</span>
                     <button type='button' onClick={ () => {showAddComment(!addCommentVisisble)} } className='cursor-pointer'><RiQuestionAnswerLine /></button>
-                    <span className="ml-10 text-xs" >{dateFormatter.format(new Date())}</span>
+                    <span className="ml-10 text-xs" >{dateFormatter.format(date)}</span>
                 </div>
             <div className="bg-green-200">
                 {image && <img src={`/uploads/${image}`} height="320px" width="240px" alt="" />}
