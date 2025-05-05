@@ -27,7 +27,7 @@ export default function Comment({id, user, message, image }) {
                 {message}</div>
             {childComments && childComments.length > 0 && <div className='ml-2 bg-orange-200'>{<CommentList comments={childComments}/>}</div> }
             </div>
-            { addCommentVisisble && <AddCommentForm postId={post.id} parentId={id} sendJsonMessage={sendJsonMessage} /> }
+            { addCommentVisisble && <AddCommentForm postId={post.id} parentId={id} sendJsonMessage={sendJsonMessage} showAddComment={showAddComment} /> }
         </>
     )
  }

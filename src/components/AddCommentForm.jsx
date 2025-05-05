@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
+export default function AddCommentForm({postId, parentId, sendJsonMessage, showAddComment}) {
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [homepage, setHomepage] = useState('');
@@ -10,6 +10,17 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
   const [error, setError] = useState(null);
+
+  const resetForm = () => {
+    setUsername('');
+    setEmail('');
+    setHomepage('');
+    setCaptchaAnswer('');
+    setMessage('');
+    setFile(null);
+    setFileName('No file chosen');
+    setError(null);
+  };
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
@@ -22,7 +33,7 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
     } else {
       setHomepageError('');
     }
-    console.log('file', file);
+
     if(file) {
       const reader = new FileReader();
 
@@ -39,7 +50,9 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
           file:fileData,
           fileName
         };
-        sendJsonMessage(commentData)
+        sendJsonMessage(commentData);
+        resetForm();
+        showAddComment(false);
       }
       reader.readAsDataURL(file);
     } else {
@@ -56,17 +69,9 @@ export default function AddCommentForm({postId, parentId, sendJsonMessage}) {
       };
   
       sendJsonMessage(commentData);
-  
+      resetForm();
+      showAddComment(false);
     }
-
-
-    // submitComment(commentData).then(() => {
-    //   setUsername('');
-    //   setEmail('');
-    //   setHomepage('');
-    //   setCaptchaAnswer('');
-    //   setMessage('');
-    // });
   }
 
   return (
