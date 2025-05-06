@@ -13,8 +13,7 @@ export function usePost() {
 export function PostProvider({ children }) {
   const { id } = useParams();
   const { loading, error, value: post } = useAsync(() => getPostById(id), [id]);
-  const { sendMessage, sendJsonMessage, lastMessage, readyState } =
-    useWebSocket("ws://localhost:3000/ws");
+  const { sendMessage, sendJsonMessage, lastMessage, readyState } = useWebSocket("ws://localhost:3000/ws");
   const [comments, setComments] = useState([]);
   const commentsByParentId = useMemo(() => {
     const group = {};
@@ -31,7 +30,6 @@ export function PostProvider({ children }) {
   }, [post?.comments]);
 
   useEffect(() => {
-    lastMessage && console.log("lastMessage", lastMessage.data);
     lastMessage &&
       lastMessage.data.text().then((text) => {
         const newComment = JSON.parse(text);

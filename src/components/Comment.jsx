@@ -10,11 +10,12 @@ export default function Comment({ id, user, message, image, time }) {
     dateStyle: "short",
     timeStyle: "short",
   });
-
+  
+  
   const { getReplies, post, sendJsonMessage } = usePost();
   const childComments = getReplies(id);
   const [addCommentVisisble, showAddComment] = useState(false);
-
+  
   return (
     <>
       <div className="comment ml-5 mr-5 mb-2 mt-2">
