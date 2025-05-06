@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaUndoAlt } from "react-icons/fa";
+import { getCaptcha, insertTag } from "./helpers";
 
 export default function AddCommentForm({
   postId,
@@ -19,6 +20,8 @@ export default function AddCommentForm({
   const [captcha, setCaptcha] = useState(getCaptcha());
   const [captchaRefresh, setCaptchaRefresh] = useState(false);
 
+  const textareaRef = useRef(null);
+
   const resetForm = () => {
     setUsername("");
     setEmail("");
@@ -29,17 +32,6 @@ export default function AddCommentForm({
     setFileName("No file chosen");
     setError(null);
   };
-
-  function getCaptcha() {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let captcha = "";
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      captcha += characters[randomIndex];
-    }
-    return captcha;
-  }
 
   const urlRegex = /^(https?:\/\/)?(www\.)?[\w-]+\.[a-z]{2,}([/\w\-.]*)*\/?$/i;
 
@@ -204,8 +196,45 @@ export default function AddCommentForm({
             style={{ display: "none" }}
           />
         </div>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() =>
+              insertTag(textareaRef, setMessage, '<a href="" title="">', "</a>")
+            }
+            className="px-2 py-1 bg-blue-200 rounded cursor-pointer"
+          >
+            &lt;a&gt;
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              insertTag(textareaRef, setMessage, "<code>", "</code>")
+            }
+            className="px-2 py-1 bg-blue-200 rounded cursor-pointer"
+          >
+            &lt;code&gt;
+          </button>
+          <button
+            type="button"
+            onClick={() => insertTag(textareaRef, setMessage, "<i>", "</i>")}
+            className="px-2 py-1 bg-blue-200 rounded cursor-pointer"
+          >
+            &lt;i&gt;
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              insertTag(textareaRef, setMessage, "<strong>", "</strong>")
+            }
+            className="px-2 py-1 bg-blue-200 rounded cursor-pointer"
+          >
+            &lt;strong&gt;
+          </button>
+        </div>
         <textarea
           onChange={(e) => setMessage(e.target.value)}
+          ref={textareaRef}
           placeholder="Add your comment please"
           required
           value={message}

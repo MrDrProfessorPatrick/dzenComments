@@ -3,6 +3,7 @@ import { usePost } from "../hooks/PostContext";
 import CommentList from "./CommentsList";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import AddCommentForm from "./AddCommentForm";
+import DOMPurify from "dompurify";
 
 export default function Comment({ id, user, message, image, time }) {
   const date = new Date(time);
@@ -10,8 +11,12 @@ export default function Comment({ id, user, message, image, time }) {
     dateStyle: "short",
     timeStyle: "short",
   });
-  
-  
+
+  const sanitizedHTML = DOMPurify.sanitize(message, {
+    ALLOWED_TAGS: ["a", "code", "i", "strong"],
+    ALLOWED_ATTR: ["href", "title", "target", "rel"],
+  });
+
   const { getReplies, post, sendJsonMessage } = usePost();
   const childComments = getReplies(id);
   const [addCommentVisisble, showAddComment] = useState(false);
@@ -41,7 +46,10 @@ export default function Comment({ id, user, message, image, time }) {
               alt=""
             />
           )}
-          <div dangerouslySetInnerHTML={{ __html: message }} className="p-2"></div>
+          <div
+            dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
+            className="p-2"
+          ></div>
         </div>
         {addCommentVisisble && (
           <AddCommentForm
