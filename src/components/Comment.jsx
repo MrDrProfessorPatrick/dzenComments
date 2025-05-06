@@ -15,7 +15,7 @@ export default function Comment({ id, user, message, image, time }) {
   const { getReplies, post, sendJsonMessage } = usePost();
   const childComments = getReplies(id);
   const [addCommentVisisble, showAddComment] = useState(false);
-  
+
   return (
     <>
       <div className="comment ml-5 mr-5 mb-2 mt-2">
@@ -41,7 +41,7 @@ export default function Comment({ id, user, message, image, time }) {
               alt=""
             />
           )}
-          <div className="p-2">{message}</div>
+          <div dangerouslySetInnerHTML={{ __html: message }} className="p-2"></div>
         </div>
         {addCommentVisisble && (
           <AddCommentForm
