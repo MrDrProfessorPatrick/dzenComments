@@ -18,7 +18,7 @@ export default function Comment({ id, user, message, image, time }) {
   return (
     <>
       <div className="comment ml-5 mr-5 mb-2 mt-2">
-        <div className="flex items-center gap-2">
+        <div className="flex justify-between">
           <span className="name">{user.name}</span>
           <button
             type="button"
@@ -31,7 +31,7 @@ export default function Comment({ id, user, message, image, time }) {
           </button>
           <span className="ml-10 text-xs">{dateFormatter.format(date)}</span>
         </div>
-        <div className="bg-green-200">
+        <div className="flex bg-green-200 p-2 rounded-md">
           {image && (
             <img
               src={`/uploads/${image}`}
@@ -40,22 +40,22 @@ export default function Comment({ id, user, message, image, time }) {
               alt=""
             />
           )}
-          {message}
+          <div className="p-2">{message}</div>
         </div>
+        {addCommentVisisble && (
+          <AddCommentForm
+            postId={post.id}
+            parentId={id}
+            sendJsonMessage={sendJsonMessage}
+            showAddComment={showAddComment}
+          />
+        )}
         {childComments && childComments.length > 0 && (
           <div className="ml-2 bg-orange-200">
             {<CommentList comments={childComments} />}
           </div>
         )}
       </div>
-      {addCommentVisisble && (
-        <AddCommentForm
-          postId={post.id}
-          parentId={id}
-          sendJsonMessage={sendJsonMessage}
-          showAddComment={showAddComment}
-        />
-      )}
     </>
   );
 }
