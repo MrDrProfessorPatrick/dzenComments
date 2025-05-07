@@ -1,6 +1,6 @@
 import Comment from "./Comment";
 
-export default function CommentList({ comments }) {
+export default function CommentList({ comments, setShowBigImage }) {
   return (
     comments &&
     comments.length &&
@@ -15,6 +15,7 @@ export default function CommentList({ comments }) {
           message={comment.message}
           image={comment.fileUrl}
           time={comment.createdAt}
+          setShowBigImage={setShowBigImage}
         />
       </div>
     ))

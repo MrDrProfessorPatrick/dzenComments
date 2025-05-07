@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { usePost } from "../hooks/PostContext";
-import CommentList from "./CommentsList";
 import { RiQuestionAnswerLine } from "react-icons/ri";
-import AddCommentForm from "./AddCommentForm";
 import DOMPurify from "dompurify";
 
-export default function Comment({ id, user, message, image, time }) {
+import AddCommentForm from "./AddCommentForm";
+import CommentList from "./CommentsList";
+
+export default function Comment({
+  id,
+  user,
+  message,
+  image,
+  time,
+  setShowBigImage,
+}) {
   const date = new Date(time);
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: "short",
@@ -44,6 +52,7 @@ export default function Comment({ id, user, message, image, time }) {
               height="320px"
               width="240px"
               alt=""
+              onClick={() => setShowBigImage(`/uploads/${image}`)}
             />
           )}
           <div

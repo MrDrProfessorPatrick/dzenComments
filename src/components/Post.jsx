@@ -6,6 +6,8 @@ import { usePost } from "../hooks/PostContext";
 import { useAsyncFn } from "../hooks/useAsync";
 import { createComment } from "../services/comments";
 
+import BigImage from "./BigImage";
+
 export default function Post() {
   const COMMENTS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +15,8 @@ export default function Post() {
   const [sortedByDate, setSortedByDate] = useState(false);
   const [sortedComments, setSortedComments] = useState(rootComments);
   const [paginatedRootComments, setPaginatedRootComments] = useState([]);
+  const [bigImage, setShowBigImage] = useState("");
+
   let commentsLength =
     rootComments && rootComments.length > 0 ? rootComments.length : 0;
   const {
@@ -56,6 +60,9 @@ export default function Post() {
         <AddCommentForm postId={post.id} sendJsonMessage={sendJsonMessage} />
         {rootComments != null && rootComments.length > 0 && (
           <div className="mt-4">
+            {bigImage && (
+              <BigImage image={bigImage} setShowBigImage={setShowBigImage} />
+            )}
             <div className="flex justify-end mb-2 mr-6">
               <button
                 onClick={() => setSortedByDate((prev) => !prev)}
@@ -69,6 +76,7 @@ export default function Post() {
               comments={paginatedRootComments}
               postId={post.id}
               submitComment={handleCommentCreate}
+              setShowBigImage={setShowBigImage}
             />
           </div>
         )}
