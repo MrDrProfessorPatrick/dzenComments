@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AddCommentForm from "./AddCommentForm";
 import CommentsList from "./CommentsList";
+import { Link } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 import { usePost } from "../hooks/PostContext";
 import { useAsyncFn } from "../hooks/useAsync";
@@ -26,9 +28,7 @@ export default function Post() {
   } = useAsyncFn(createComment);
 
   function handleCommentCreate(message) {
-    createCommentFn({ message }).then((comment) =>
-      console.log("comment", comment)
-    );
+    createCommentFn({ message });
   }
 
   useEffect(() => {
@@ -53,9 +53,11 @@ export default function Post() {
 
   return (
     <>
-      <h1>{post.title}</h1>
-      <article>{post.body}</article>
-      <h3 className="comments-title">Comments</h3>
+      <Link className="block ml-3 mt-3" to="/">
+        <IoArrowBack size={30} />
+      </Link>
+      <h1 className="m-4 font-bold">{post.title}</h1>
+      <article className="m-4">{post.body}</article>
       <section>
         <AddCommentForm postId={post.id} sendJsonMessage={sendJsonMessage} />
         {rootComments != null && rootComments.length > 0 && (
@@ -71,6 +73,7 @@ export default function Post() {
                 {sortedByDate ? "Oldest first" : "Newest first"}
               </button>
             </div>
+            <h3 className="font-bold ml-3">Comments:</h3>
 
             <CommentsList
               comments={paginatedRootComments}

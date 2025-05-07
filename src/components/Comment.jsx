@@ -32,7 +32,7 @@ export default function Comment({
   return (
     <>
       <div className="comment ml-5 mr-5 mb-2 mt-2">
-        <div className="flex justify-between">
+        <div className="flex w-full justify-between mb-4 mt-1">
           <span className="name">{user.name}</span>
           <button
             type="button"
@@ -45,7 +45,7 @@ export default function Comment({
           </button>
           <span className="ml-10 text-xs">{dateFormatter.format(date)}</span>
         </div>
-        <div className="flex bg-green-200 p-2 rounded-md">
+        <div className="flex w-full bg-green-200 p-2 rounded-md">
           {image && (
             <img
               src={`/uploads/${image}`}
@@ -57,7 +57,7 @@ export default function Comment({
           )}
           <div
             dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
-            className="p-2"
+            className="p-2 w-full"
           ></div>
         </div>
         {addCommentVisisble && (
@@ -69,7 +69,7 @@ export default function Comment({
           />
         )}
         {childComments && childComments.length > 0 && (
-          <div className="ml-2 bg-orange-200">
+          <div className="ml-3 w-full bg-yellow-100">
             {<CommentList comments={childComments} />}
           </div>
         )}

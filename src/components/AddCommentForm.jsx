@@ -96,7 +96,7 @@ export default function AddCommentForm({
   }, [captchaRefresh]);
 
   return (
-    <div className="flex-col gap-3 h-fit w-screen p-6 bg-red-100">
+    <div className="flex-col gap-3 h-fit max-w-3xl ml-3 mr-3 mt-2 p-6 bg-red-100">
       {error && (
         <div className="bg-red-200 text-red-600 p-4 rounded-md">{error}</div>
       )}

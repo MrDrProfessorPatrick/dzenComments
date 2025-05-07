@@ -7,7 +7,7 @@ export default function CommentList({ comments, setShowBigImage }) {
     comments.map((comment) => (
       <div
         key={comment.id}
-        className={`comment-stack m-5 ${comment.parentId === null ? "border" : ""}`}
+        className={`m-5 ${comment.parentId === null ? "border bg-blue-300" : ""}`}
       >
         <Comment
           id={comment.id}
