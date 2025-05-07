@@ -12,4 +12,4 @@ RUN npx prisma generate
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node server.js"]

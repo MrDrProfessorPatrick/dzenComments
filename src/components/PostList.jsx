@@ -10,7 +10,7 @@ export default function PostList() {
 
   return (
     <div className="bg-gray-600 w-full" >
-      {posts.map((post) => (
+      {posts && posts.length && posts.map((post) => (
           <Link className="text-white ml-2 mr-2" to={`/posts/${post.id}`}>{post.title}</Link>
         )
       )}

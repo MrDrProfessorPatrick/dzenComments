@@ -1,0 +1,49 @@
+name: dzen-comments-prod
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dzen-frontend:prod
+    command: ["npm", "run", "preview"]
+    ports:
+      - 5173:4173
+    environment:
+      - NODE_ENV=production
+
+  backend:
+    container_name: backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: dzen-backend:prod
+    command: >
+      sh -c "./wait-for.sh db:5432 -- 
+      sh -c 'npx prisma migrate deploy &&
+      npx prisma db seed &&
+      npm run start'"
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://prisma:password@db:5432/dzencomments
+
+  db:
+    container_name: db
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dzencomments
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
