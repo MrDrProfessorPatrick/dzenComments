@@ -12,8 +12,11 @@ export function usePost() {
 
 export function PostProvider({ children }) {
   const { id } = useParams();
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const socketUrl = `${protocol}://${window.location.host}/ws`;
   const { loading, error, value: post } = useAsync(() => getPostById(id), [id]);
-  const { sendMessage, sendJsonMessage, lastMessage, readyState } = useWebSocket("ws://localhost:3000/ws");
+  const { sendMessage, sendJsonMessage, lastMessage, readyState } =
+    useWebSocket(socketUrl);
   const [comments, setComments] = useState([]);
   const commentsByParentId = useMemo(() => {
     const group = {};
