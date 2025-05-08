@@ -16,4 +16,4 @@ RUN npx prisma db seed
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

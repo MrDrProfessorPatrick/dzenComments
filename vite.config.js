@@ -6,7 +6,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: true,
-    port: 5173,
+    // host: true, // dev environment
+    // port: 5173,
+    port: 80,
+    host: "0.0.0.0",
   },
 });
