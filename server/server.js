@@ -15,7 +15,7 @@ import { createCommentHelper } from "./comments/helpers.js";
 dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const port = process.env.PORT || 5002;
+const port = process.env.PORT || 80;
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 
