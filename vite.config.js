@@ -2,14 +2,11 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    // host: true, // dev environment
-    // port: 5173,
+  preview: {
     port: 80,
     host: "0.0.0.0",
-    allowedHosts: 'all',
+    allowedHosts: ["dzencomments-ydk8.onrender.com"],
   },
 });
